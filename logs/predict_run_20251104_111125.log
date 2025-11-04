@@ -1,0 +1,6 @@
+2025-11-04 11:11:25,350 - INFO - Run started: 20251104_111125
+2025-11-04 11:11:25,362 - INFO - Loaded CSV: C:\Users\Lenovo\Downloads\ML_CLASSIFIER_PROJECT\data\synthetic_prediction_data.csv [rows=500]
+2025-11-04 11:11:25,364 - INFO - Columns: ['score', 'reviewId', 'userName', 'at', 'content', 'replyContent']
+2025-11-04 11:11:26,207 - INFO - Stats: {"doc_count": 500, "len_mean": 13.714, "len_p50": 8.0, "len_p95": 46.09999999999991, "oov_mean": 0.3132476534573034, "oov_p95": 0.6, "empty_docs": 8}
+2025-11-04 11:11:26,222 - INFO - CSV saved: C:\Users\Lenovo\Downloads\ML_CLASSIFIER_PROJECT\data\synthetic_prediction_results.csv
+2025-11-04 11:11:26,222 - INFO - Run complete: 20251104_111125

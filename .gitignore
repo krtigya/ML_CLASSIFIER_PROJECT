@@ -1,0 +1,25 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.env
+venv/
+.env/
+*.db
+*.sqlite3
+
+# Data
+data/raw/*
+data/processed/*
+!data/.gitkeep
+
+# Jupyter
+.ipynb_checkpoints/
+
+# VSCode
+.vscode/
+
+# Models
+models/*
+!models/.gitkeep

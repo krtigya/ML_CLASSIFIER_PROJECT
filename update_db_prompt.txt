@@ -1,0 +1,39 @@
+Prompt: Update my db.py file for my NLP review analysis project.
+
+Context:
+I am building an NLP-based review analysis and suggestion extraction system using spaCy + Hugging Face + SQLite. 
+My db.py currently handles storing and loading of clean reviews and suggestions. 
+I want to improve it so it’s production-grade and ready for my Streamlit dashboard.
+
+Goals:
+1. Add structured error handling for all database operations (connection, read, write).
+2. Add append mode to preserve previous data instead of replacing it.
+3. Integrate log_message() from utils.py for better logging.
+4. Add schema validation before saving data to ensure columns match.
+5. Add helper functions to:
+   - Get the latest N reviews.
+   - Get aggregated sentiment statistics for dashboard charts.
+   - Count number of suggestions.
+6. Make sure all DataFrames can be loaded easily into Streamlit.
+7. The file should remain lightweight, modular, and readable.
+
+Additional Notes:
+- Database file is located at: data/reviews.db
+- Tables: clean_reviews, suggestions
+- I want the code ready to plug into a Streamlit dashboard.
+- It should use Python’s sqlite3 and pandas only (no SQLAlchemy).
+
+When you generate the code:
+- Include docstrings and inline comments.
+- Keep compatibility with my current project structure (src/, data/, etc.).
+- Ensure the script can be run directly for testing (with __main__ block).
+
+Output:
+- Full updated db.py file code block only.
+- The file must reflect all new improvements mentioned above.
+
+
+
+// cmd command for the windows
+mkdir prompts
+echo Prompt: Update my db.py file for my NLP review analysis project. > prompts/update_db_prompt.txt

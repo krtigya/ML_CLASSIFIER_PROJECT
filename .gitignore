@@ -1,25 +1,26 @@
-# Python
-__pycache__/
-*.pyc
-*.pyo
-*.pyd
-.env
+# ----------------------------------------
+# 1. IGNORE ALL CODE FILES (*.py) - (Keeping this as requested)
+# ----------------------------------------
+*.py
+*/__pycache__/*
+
+# ----------------------------------------
+# 2. Files to KEEP (MODELS & DBs) - REMOVED FROM IGNORE LIST
+# ----------------------------------------
+# data/*.db and models/*.pkl are REMOVED from this file.
+
+# ----------------------------------------
+# 3. IGNORE INTERMEDIATE CSVs (Cleanup)
+# ----------------------------------------
+data/cleaned_reviews.csv
+data/nlp_processed_reviews.csv
+data/nlp_processed_reviews_filtered.csv
+data/suggestions.csv
+data/predicted_data.csv 
+
+# ----------------------------------------
+# 4. IGNORE ENVIRONMENT FILES
+# ----------------------------------------
+.venv/
 venv/
-.env/
-*.db
-*.sqlite3
-
-# Data
-data/raw/*
-data/processed/*
-!data/.gitkeep
-
-# Jupyter
-.ipynb_checkpoints/
-
-# VSCode
-.vscode/
-
-# Models
-models/*
-!models/.gitkeep
+.DS_Store

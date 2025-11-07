@@ -16,6 +16,8 @@ DB_NAME = "nlp_final.db"
 DB_PATH = os.path.join(DB_FOLDER, DB_NAME)
 os.makedirs(DB_FOLDER, exist_ok=True)
 
+
+
 # 1️ Load NLP-processed reviews
 def load_nlp_processed_reviews():
     csv_path = "data/nlp_processed_reviews.csv"

@@ -1,7 +1,7 @@
 # db.py — Database Utility Functions
 # -----------------------------------
 # Handles database connection, saving, and loading
-# for clean reviews and suggestion reviews.
+# for clean reviews and suggestion reviews, plus raw ingestion.
 
 import sqlite3
 import pandas as pd
@@ -31,6 +31,38 @@ os.makedirs(DB_FOLDER, exist_ok=True)
 def get_connection():
     """Return a SQLite connection to the database."""
     return sqlite3.connect(DB_PATH)
+
+# =========================================================
+# 💡 NEW FUNCTIONS REQUIRED BY data_ingestion.py (THE FIX)
+# =========================================================
+
+def create_tables():
+    """Creates the initial 'reviews' table for raw data ingestion."""
+    conn = get_connection()
+    c = conn.cursor()
+    c.execute("""
+        CREATE TABLE IF NOT EXISTS reviews (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            review_text TEXT,
+            rating INTEGER,
+            date TEXT
+        )
+    """)
+    conn.commit()
+    conn.close()
+
+def insert_review(review_text, rating, date):
+    """Inserts a single raw review into the 'reviews' table."""
+    conn = get_connection()
+    c = conn.cursor()
+    c.execute("INSERT INTO reviews (review_text, rating, date) VALUES (?, ?, ?)",
+              (review_text, rating, date))
+    conn.commit()
+    conn.close()
+    
+# =========================================================
+# 📌 END OF FIX
+# =========================================================
 
 def save_to_db(clean_df, suggest_df):
     """Save clean and suggestion DataFrames into the database."""

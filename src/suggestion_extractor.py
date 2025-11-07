@@ -1,5 +1,4 @@
-# here it will extracts suggestion and improvement phrases from reviews using the rule-based patterns 
-
+# suggestion_extractor.py (Refactored fix)
 
 import pandas as pd
 import re
@@ -55,7 +54,12 @@ def extract_suggestion_phrases():
     df = pd.read_csv(CLEAN_DATA_PATH)
     
     print("🔍 Extracting suggestion phrases from reviews...")
-    df["suggestion_text"] = df["clean_text"].apply(extract_suggestions)
+    
+    # FIX: Change 'clean_text' to 'cleaned_review' to match preprocessing.py output
+    if 'cleaned_review' not in df.columns:
+        raise ValueError("Missing 'cleaned_review' column in CSV. Run preprocessing.py first.")
+        
+    df["suggestion_text"] = df["cleaned_review"].apply(extract_suggestions)
     
     # Mark whether review contains a suggestion
     df["has_suggestion"] = df["suggestion_text"].apply(lambda x: bool(x.strip()))
@@ -69,8 +73,6 @@ def extract_suggestion_phrases():
     
     return df
 
-
-# EXECUTION
 
 if __name__ == "__main__":
     extract_suggestion_phrases()

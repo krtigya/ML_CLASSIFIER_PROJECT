@@ -4,7 +4,8 @@ import re
 import emoji
 import os
 import nltk
-from database_utils import get_connection, ensure_reviews_table
+# FIX: Removed the undefined 'ensure_reviews_table'
+from database_utils import get_connection 
 from suggestion_extractor import extract_suggestions
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
@@ -15,8 +16,6 @@ print("[INFO] Ensuring NLTK resources...")
 nltk.download('punkt', quiet=True)
 nltk.download('stopwords', quiet=True)
 
-from nltk.corpus import stopwords
-from nltk.tokenize import word_tokenize
 
 STOPWORDS = set(stopwords.words('english'))
 
@@ -35,8 +34,7 @@ def clean_text_safe(text):
         tokens = word_tokenize(text)
         tokens = [t for t in tokens if t not in STOPWORDS]
         return ' '.join(tokens)
-    except Exception as e:
-        print(f"[WARNING] Failed to clean text: {text} | Error: {e}")
+    except Exception:
         return ""
 
 # --- Sentiment labeling ---
@@ -51,19 +49,19 @@ def label_review(rating):
             return "neutral"
     except:
         return "unknown"
-
-# --- Suggestion detection ---
+        
+# --- Suggestion detection keywords ---
 SUGGESTION_KEYWORDS = ['please', 'fix', 'need', 'should', 'improve', 'suggest', 'update', 'bug', 'problem']
 
 def detect_suggestion_safe(text):
+    """Return 1 if text contains suggestion keywords, 0 otherwise."""
     try:
         text_lower = str(text).lower()
         for keyword in SUGGESTION_KEYWORDS:
             if keyword in text_lower:
                 return 1
         return 0
-    except Exception as e:
-        print(f"[WARNING] Failed to detect suggestion: {text} | Error: {e}")
+    except Exception:
         return 0
 
 # --- Nepali review detection ---
@@ -71,19 +69,21 @@ def is_nepali(text):
     """Return True if the text contains Devanagari characters (Nepali/Hindi script)."""
     if pd.isna(text):
         return False
+    # Check for Devanagari Unicode range
     return any('\u0900' <= c <= '\u097F' for c in text)
 
 # --- Main preprocessing function ---
-def preprocess_from_db(db_path, output_csv):
-    print(f"[INFO] Connecting to database: {db_path}")
+def run_preprocessing(output_csv="data/cleaned_reviews.csv", nlp_csv="data/nlp_processed_reviews.csv"):
+    
+    # FIX: Removed ensure_reviews_table call, as data_ingestion created the table.
     conn = get_connection()
-    ensure_reviews_table(conn)
-
+    
     # Read reviews table
     try:
+        # We assume the 'reviews' table was successfully created by data_ingestion.py
         df = pd.read_sql_query("SELECT id, review_text, rating, date FROM reviews", conn)
     except Exception as e:
-        print(f"[ERROR] Failed to read 'reviews' table: {e}")
+        print(f"[ERROR] Failed to read 'reviews' table. Have you run data_ingestion.py? Error: {e}")
         conn.close()
         return
 
@@ -106,24 +106,47 @@ def preprocess_from_db(db_path, output_csv):
     print("[INFO] Cleaning, tokenizing, and labeling reviews...")
     df['cleaned_review'] = df['review_text'].apply(clean_text_safe)
     df['label'] = df['rating'].apply(label_review)
-    df['is_suggestion'] = df['review_text'].apply(detect_suggestion_safe)
+    df['is_suggestion'] = df['review_text'].apply(detect_suggestion_safe) 
     df['suggestion_text'] = df['review_text'].apply(extract_suggestions)
 
 
     # Remove empty cleaned reviews
     df = df[df['cleaned_review'].str.strip() != '']
 
-    # Save to CSV
+    # --- 1. Save all cleaned data (for Analytics) ---
     os.makedirs(os.path.dirname(output_csv), exist_ok=True)
-    df[['id', 'rating', 'cleaned_review', 'label', 'is_suggestion']].to_csv(output_csv, index=False)
+    df[['id', 'rating', 'cleaned_review', 'label', 'is_suggestion', 'suggestion_text']].to_csv(output_csv, index=False)
 
     # Save to SQLite
     df.to_sql('cleaned_reviews', conn, if_exists='replace', index=False)
+    print(f"[DONE] Cleaned reviews (including 'neutral') saved to {output_csv} and database table 'cleaned_reviews'.")
 
+    # --- 2. Create and Save NLP-Processed Data (for Model Training) ---
+    nlp_df = df.copy()
+
+    # Filter out neutral reviews (typically not used in binary classification)
+    nlp_df = nlp_df[nlp_df['label'].isin(['positive', 'negative'])].copy()
+    
+    # Rename columns to match what sentiment_model.py expects
+    nlp_df = nlp_df.rename(columns={
+        'cleaned_review': 'cleaned_text',
+        'label': 'sentiment'
+    })
+
+    # Convert labels to uppercase
+    nlp_df['sentiment'] = nlp_df['sentiment'].str.upper()
+
+    # Select only the columns needed for training
+    nlp_df = nlp_df[['cleaned_text', 'sentiment']]
+
+    # Save to CSV
+    os.makedirs(os.path.dirname(nlp_csv), exist_ok=True)
+    nlp_df.to_csv(nlp_csv, index=False)
+
+    print(f"[DONE] NLP-Processed reviews (POS/NEG only) saved to {nlp_csv}.")
+    
     conn.close()
-    print("[DONE] Preprocessing complete! Cleaned and labeled reviews saved to CSV and database.")
+
 
 if __name__ == "__main__":
-    db_path = "data/reviews.db"
-    output_csv = "data/cleaned_reviews.csv"
-    preprocess_from_db(db_path, output_csv)
+    run_preprocessing()

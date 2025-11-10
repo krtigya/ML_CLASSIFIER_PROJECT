@@ -1,5 +1,6 @@
-# preprocessing_for_prediction.py (Refactored)
-# Safe preprocessing for prediction (no database dependencies)
+# preprocessing_for_prediction.py 
+# All the preprocessing functions needed for prediction pipeline
+# Safe preprocessing for prediction (no database operations)
 
 import re
 import emoji

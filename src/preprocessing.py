@@ -4,14 +4,13 @@ import re
 import emoji
 import os
 import nltk
-# FIX: Removed the undefined 'ensure_reviews_table'
 from database_utils import get_connection 
 from suggestion_extractor import extract_suggestions
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 
 
-# --- Ensure NLTK resources are available ---
+# NLTK resource downloads
 print("[INFO] Ensuring NLTK resources...")
 nltk.download('punkt', quiet=True)
 nltk.download('stopwords', quiet=True)
@@ -19,7 +18,7 @@ nltk.download('stopwords', quiet=True)
 
 STOPWORDS = set(stopwords.words('english'))
 
-# --- Text cleaning ---
+# Text cleaning
 def remove_emojis(text):
     return emoji.replace_emoji(text, replace='')
 

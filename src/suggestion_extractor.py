@@ -50,7 +50,7 @@ def extract_suggestions(text):
 # MAIN PIPELINE
 
 def extract_suggestion_phrases():
-    print(f"🧾 Reading cleaned data from: {CLEAN_DATA_PATH}")
+    print(f" Reading cleaned data from: {CLEAN_DATA_PATH}")
     df = pd.read_csv(CLEAN_DATA_PATH)
     
     print("🔍 Extracting suggestion phrases from reviews...")
@@ -64,7 +64,7 @@ def extract_suggestion_phrases():
     # Mark whether review contains a suggestion
     df["has_suggestion"] = df["suggestion_text"].apply(lambda x: bool(x.strip()))
     
-    print("💾 Saving suggestion results...")
+    print(" Saving suggestion results...")
     os.makedirs(os.path.dirname(OUTPUT_PATH), exist_ok=True)
     df.to_csv(OUTPUT_PATH, index=False, encoding="utf-8-sig")
     

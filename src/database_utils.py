@@ -32,9 +32,8 @@ def get_connection():
     """Return a SQLite connection to the database."""
     return sqlite3.connect(DB_PATH)
 
-# =========================================================
-# 💡 NEW FUNCTIONS REQUIRED BY data_ingestion.py (THE FIX)
-# =========================================================
+
+# 💡 NEW FUNCTIONS REQUIRED BY data_ingestion.py to create table and database connection
 
 def create_tables():
     """Creates the initial 'reviews' table for raw data ingestion."""
@@ -60,9 +59,8 @@ def insert_review(review_text, rating, date):
     conn.commit()
     conn.close()
     
-# =========================================================
-# 📌 END OF FIX
-# =========================================================
+# --- Functions for saving/loading clean and suggestion reviews ---
+
 
 def save_to_db(clean_df, suggest_df):
     """Save clean and suggestion DataFrames into the database."""
@@ -70,7 +68,7 @@ def save_to_db(clean_df, suggest_df):
     clean_df.to_sql("clean_reviews", conn, if_exists="replace", index=False)
     suggest_df.to_sql("suggestions", conn, if_exists="replace", index=False)
     conn.close()
-    print("\n✅ Data saved into database tables: clean_reviews, suggestions")
+    print("\n Data saved into database tables: clean_reviews, suggestions")
 
 def load_clean_reviews():
     """Load clean (positive/negative) reviews from the database."""
@@ -126,7 +124,7 @@ def save_nlp_processed_reviews(df):
     conn = get_connection()
     df.to_sql("nlp_processed_reviews", conn, if_exists="replace", index=False)
     conn.close()
-    print("✅ NLP-processed reviews saved into 'nlp_processed_reviews' table.")
+    print(" NLP-processed reviews saved into 'nlp_processed_reviews' table.")
 
 
 # --- Optional test when running this script directly ---

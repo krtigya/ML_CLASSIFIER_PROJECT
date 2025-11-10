@@ -9,9 +9,9 @@ import sys
 import locale
 from preprocessing_for_prediction import apply_preprocessing_to_series 
 
-# =========================================================
-# 💡 ROBUST UTF-8 FIX
-# =========================================================
+
+#  ROBUST UTF-8 
+
 def ensure_utf8_encoding():
     try:
         if sys.platform.startswith('win'):
@@ -22,16 +22,16 @@ def ensure_utf8_encoding():
         sys.stderr = open(sys.stderr.fileno(), mode='w', encoding='utf-8', buffering=1)
 
 ensure_utf8_encoding()
-# =========================================================
 
 
-# === Configuration (Use relative path for portability) ===
+
+# Configuration (Use relative path for portability)
 INPUT_DATA_PATH = os.path.join("data", "testing_data.csv") 
 MODEL_PATH = os.path.join("models", "best_sentiment_model.pkl")
 VECTORIZER_PATH = os.path.join("models", "tfidf_vectorizer.pkl")
 
 
-# === Step 1: Loading ===
+# Step 1: 
 
 def load_model_and_vectorizer():
     """Load the trained model and TF-IDF vectorizer."""
@@ -44,10 +44,10 @@ def load_model_and_vectorizer():
         with open(VECTORIZER_PATH, "rb") as f:
             vectorizer = pickle.load(f)
 
-        print("✅ Model and Vectorizer loaded successfully.") 
+        print("Model and Vectorizer loaded successfully.") 
         return model, vectorizer
     except Exception as e:
-        print(f"❌ Error loading model/vectorizer: {e}")
+        print(f" Error loading model/vectorizer: {e}")
         return None, None
 
 
@@ -84,11 +84,11 @@ def load_raw_data(path):
         
         return df.reset_index()
     except Exception as e:
-        print(f"❌ [ERROR] Failed to load data from {path}: {e}") 
+        print(f" [ERROR] Failed to load data from {path}: {e}") 
         return None
 
 
-# === Step 2 & 3: Preprocessing and Prediction ===
+# Step 2 & 3: Preprocessing and Prediction 
 
 def run_prediction_pipeline(data_path):
     """Orchestrates the prediction steps: Load, Preprocess, Vectorize, Predict."""
@@ -161,7 +161,7 @@ def run_prediction_pipeline(data_path):
             y_pred_model = model.predict(vectorizer.transform(eval_df["cleaned_text"]))
             
             accuracy = accuracy_score(y_true, y_pred_model)
-            print(f"\n✨ EVALUATION COMPLETE: Accuracy on {len(eval_df)} Labeled Data Points: {accuracy * 100:.2f}%")
+            print(f"\n EVALUATION COMPLETE: Accuracy on {len(eval_df)} Labeled Data Points: {accuracy * 100:.2f}%")
         else:
             print("[WARNING] No valid 'POSITIVE'/'NEGATIVE' labels found for accuracy calculation.")
             
@@ -173,7 +173,7 @@ def run_prediction_pipeline(data_path):
     return df[final_cols], accuracy
 
 
-# === Step 4: Main execution ===
+# Step 4: Main execution
 
 if __name__ == "__main__":
     try:
@@ -190,7 +190,7 @@ if __name__ == "__main__":
             output_path = os.path.join("data", "sentiment_predictions_final.csv")
             os.makedirs(os.path.dirname(output_path), exist_ok=True)
             predictions_df.to_csv(output_path, index=False, encoding="utf-8")
-            print(f"\n✅ All predictions saved to: {output_path}")
+            print(f"\n All predictions saved to: {output_path}")
 
     except Exception as e:
-        print(f"\n❌ [CRITICAL ERROR] Failed to run prediction pipeline: {e}")
+        print(f"\n [CRITICAL ERROR] Failed to run prediction pipeline: {e}")

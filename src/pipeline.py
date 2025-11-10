@@ -1,6 +1,5 @@
 """
 pipeline.py — Save NLP-processed reviews for model training
------------------------------------------------------------
 This script loads the NLP-processed CSV, filters the required columns,
 saves them into the database, and makes them ready for model training.
 """
@@ -55,7 +54,7 @@ def save_nlp_processed_reviews(df):
     conn = get_connection()
     df.to_sql("nlp_final", conn, if_exists="replace", index=False)
     conn.close()
-    print("✅ NLP-processed reviews saved into 'nlp_processed_reviews' table.")
+    print(" NLP-processed reviews saved into 'nlp_processed_reviews' table.")
 
 
 def save_to_database(df):

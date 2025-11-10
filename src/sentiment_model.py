@@ -7,16 +7,16 @@ from sklearn.model_selection import train_test_split
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score, log_loss
-import sys # <-- ADDED IMPORT
+import sys 
 
-# --- FIX: Ensure UTF-8 Encoding for Console Output (Windows Fix) ---
+# --- FIX: Ensure UTF-8 Encoding for Console Output
 if sys.platform.startswith('win'):
     try:
         sys.stdout.reconfigure(encoding='utf-8')
         sys.stderr.reconfigure(encoding='utf-8')
     except Exception:
         pass 
-# -------------------------------------------------------------------
+
 
 # --- CONFIGURATION ---
 NLP_PROCESSED_CSV = os.path.join("data", "nlp_processed_reviews.csv")
@@ -93,7 +93,7 @@ def train_sentiment_model():
     except Exception:
         pass
 
-    print(f"\n✅ Training Complete. Model Metrics on Test Set:")
+    print(f"\n Training Complete. Model Metrics on Test Set:")
     print(f"→ Accuracy: {acc * 100:.2f}%")
     print(f"→ Log Loss: {lloss:.4f}" if lloss else "→ Log Loss: N/A")
 
@@ -105,8 +105,8 @@ def train_sentiment_model():
     with open(VECTORIZER_PATH, "wb") as f:
         pickle.dump(vectorizer, f)
         
-    print(f"\n💾 Model saved to: {MODEL_PATH}")
-    print(f"💾 Vectorizer saved to: {VECTORIZER_PATH}")
+    print(f"\n Model saved to: {MODEL_PATH}")
+    print(f"\n Vectorizer saved to: {VECTORIZER_PATH}")
 
 if __name__ == "__main__":
     train_sentiment_model()

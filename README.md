@@ -1,3 +1,4 @@
+# ML_CLASSIFIER_PROJECT
 
 This project focuses on analyzing customer feedback and reviews of the "MyWorldLink" App using Natural Language Processing (NLP) and Machine Learning techniques. The primary goal is to automatically classify user sentiments — such as positive, negative, or neutral — based on textual reviews collected from customers.
 

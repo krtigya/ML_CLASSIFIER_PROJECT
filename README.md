@@ -1,3 +1,4 @@
+
 This project focuses on analyzing customer feedback and reviews of the "MyWorldLink" App using Natural Language Processing (NLP) and Machine Learning techniques. The primary goal is to automatically classify user sentiments — such as positive, negative, or neutral — based on textual reviews collected from customers.
 
 The system leverages Python, NLTK, and Scikit-learn for text preprocessing, feature extraction, and model training. Various machine learning algorithms like Logistic Regression, Naive Bayes, Support Vector Machine (SVM), and Random Forest are evaluated to identify the most accurate model for sentiment classification.

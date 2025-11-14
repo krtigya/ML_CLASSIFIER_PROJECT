@@ -2,9 +2,11 @@
 
 import os
 import pickle
+from tkinter import _test
+from matplotlib import pyplot as plt
 import pandas as pd
 import numpy as np 
-from sklearn.metrics import accuracy_score
+from sklearn.metrics import accuracy_score, log_loss, confusion_matrix, ConfusionMatrixDisplay
 import sys
 import locale
 from preprocessing_for_prediction import apply_preprocessing_to_series 
@@ -171,6 +173,13 @@ def run_prediction_pipeline(data_path):
         final_cols.append("actual_sentiment")
         
     return df[final_cols], accuracy
+
+# print("\n[CONFUSION MATRIX]")
+# cm = confusion_matrix(_test, y_pred)
+# disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=["NEGATIVE", "POSITIVE"])
+# disp.plot(cmap='Blues', values_format='d')
+# plt.title("Confusion Matrix - Sentiment Model")
+# plt.show()
 
 
 # Step 4: Main execution

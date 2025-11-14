@@ -8,6 +8,8 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score, log_loss
 import sys 
+from sklearn.metrics import accuracy_score, log_loss, confusion_matrix, ConfusionMatrixDisplay
+import matplotlib.pyplot as plt
 
 # --- FIX: Ensure UTF-8 Encoding for Console Output
 if sys.platform.startswith('win'):
@@ -96,6 +98,13 @@ def train_sentiment_model():
     print(f"\n Training Complete. Model Metrics on Test Set:")
     print(f"→ Accuracy: {acc * 100:.2f}%")
     print(f"→ Log Loss: {lloss:.4f}" if lloss else "→ Log Loss: N/A")
+
+    print("\n[CONFUSION MATRIX]")
+    cm = confusion_matrix(y_test, y_pred)
+    disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=["NEGATIVE", "POSITIVE"])
+    disp.plot(cmap='Blues', values_format='d')
+    plt.title("Confusion Matrix - Sentiment Model")
+    plt.show()
 
     # Save model and vectorizer
     os.makedirs("models", exist_ok=True)

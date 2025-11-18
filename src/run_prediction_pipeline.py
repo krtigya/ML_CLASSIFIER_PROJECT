@@ -28,7 +28,7 @@ ensure_utf8_encoding()
 
 
 # Configuration (Use relative path for portability)
-INPUT_DATA_PATH = os.path.join("data", "testing_data.csv") 
+INPUT_DATA_PATH = os.path.join(r"data\data\raw", "synthetic_reviews.csv")
 MODEL_PATH = os.path.join("models", "best_sentiment_model.pkl")
 VECTORIZER_PATH = os.path.join("models", "tfidf_vectorizer.pkl")
 
